@@ -9,6 +9,7 @@ import About from "@/pages/about.page";
 import NotFound from "@/pages/notFound.page";
 import Unauthorized from "@/pages/unauthorized";
 import ServerError from "@/pages/serverError.page";
+import Login from "@/pages/login.page";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const AppRoutes = () => {
         {
           path: "",
           element: <Home />,
+        },
+        {
+          path: "login",
+          element: <Login />,
         },
         {
           path: "about",
