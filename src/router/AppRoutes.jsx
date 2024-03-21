@@ -4,46 +4,41 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import RootLayout from "@/components/layout/rootLayout/rootLayout.component";
-import Home from "@/pages/home.page";
-import About from "@/pages/about.page";
 import NotFound from "@/pages/notFound.page";
-import Unauthorized from "@/pages/unauthorized";
-import ServerError from "@/pages/serverError.page";
+import Departments from "@/pages/departments.page";
+import DepartmentDetails from "@/pages/departmentDetails.page";
 import Login from "@/pages/login.page";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
     {
       path: "/",
+      element: <Navigate to="/departments" />,
+    },
+    {
+      path: "/departments",
       element: <RootLayout />,
 
       children: [
         {
           path: "",
-          element: <Home />,
+          element: <Departments />,
         },
         {
-          path: "login",
-          element: <Login />,
-        },
-        {
-          path: "about",
-          element: <About />,
+          path: "/departments/:id/",
+          element: <DepartmentDetails />,
         },
       ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
     },
     {
       path: "/notFound",
       element: <NotFound />,
     },
-    {
-      path: "/unauthorized",
-      element: <Unauthorized />,
-    },
-    {
-      path: "/serverError",
-      element: <ServerError />,
-    },
+
     {
       path: "*",
       element: <Navigate to="/notFound" />,
