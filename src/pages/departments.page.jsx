@@ -1,5 +1,6 @@
 import { ENDPOINTS } from "@/api/endPoints";
 import MainLoader from "@/components/general/mainLoader.component";
+import ServerError from "@/components/general/serverError.component";
 import { dynamicAxiosRequest } from "@/helpers/utilities/dynamicAxiosRequest";
 import useSWR from "swr";
 
@@ -16,7 +17,17 @@ const Departments = () => {
     error,
   } = useSWR(`${ENDPOINTS.departments.getAllDepartments}`, fetcher);
   console.log("departments", departments);
-  return <>{isLoading ? <MainLoader /> : "data"}</>;
+  return (
+    <>
+      {isLoading ? (
+        <MainLoader />
+      ) : !isLoading && error ? (
+        <ServerError />
+      ) : (
+        "data"
+      )}
+    </>
+  );
 };
 
 export default Departments;
