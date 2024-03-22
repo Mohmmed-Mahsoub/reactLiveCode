@@ -8,7 +8,6 @@ import NotFound from "@/pages/notFound.page";
 import Departments from "@/pages/departments.page";
 import DepartmentDetails from "@/pages/departmentDetails.page";
 import Login from "@/pages/login.page";
-import { protectRoute } from "@/helpers/utilities/protectRoute";
 import { useSelector } from "react-redux";
 
 const AppRoutes = () => {
@@ -21,9 +20,11 @@ const AppRoutes = () => {
     },
     {
       path: "/departments",
-      element: <RootLayout />,
-      loader: () => protectRoute(isUserLogenedIn, "departments"),
-
+      element: isUserLogenedIn ? (
+        <RootLayout />
+      ) : (
+        <Navigate to="/login" replace />
+      ),
       children: [
         {
           path: "",
@@ -37,8 +38,7 @@ const AppRoutes = () => {
     },
     {
       path: "/login",
-      element: <Login />,
-      loader: () => protectRoute(isUserLogenedIn, "login"),
+      element: !isUserLogenedIn ? <Login /> : <Navigate to="/" replace />,
     },
     {
       path: "/notFound",
