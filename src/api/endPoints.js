@@ -1,3 +1,5 @@
 export const ENDPOINTS = {
-  home: {},
+  auth: {
+    userLogin: "/token",
+  },
 };
