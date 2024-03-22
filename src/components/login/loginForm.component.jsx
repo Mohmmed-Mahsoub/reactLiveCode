@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoginRequest } from "@/appState/slices/authSlice";
+import { showToast } from "@/helpers/utilities/showToast";
+import "react-toastify/dist/ReactToastify.css";
 
 const formSchema = z.object({
   email: z
@@ -59,7 +61,11 @@ const LoginForm = () => {
           app_type: "patient",
         },
       })
-    );
+    ).then((res) => {
+      if (!res.payload || !res.payload?.accessToken) {
+        showToast("error", "failed request");
+      }
+    });
   }
   return (
     <div className="h-screen flex justify-center items-center">
