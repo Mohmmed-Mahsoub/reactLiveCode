@@ -1,4 +1,5 @@
 import { ENDPOINTS } from "@/api/endPoints";
+import MainLoader from "@/components/general/mainLoader.component";
 import { dynamicAxiosRequest } from "@/helpers/utilities/dynamicAxiosRequest";
 import useSWR from "swr";
 
@@ -15,11 +16,7 @@ const Departments = () => {
     error,
   } = useSWR(`${ENDPOINTS.departments.getAllDepartments}`, fetcher);
   console.log("departments", departments);
-  return (
-    <div className="h-screen flex justify-center items-center">
-      Departments page
-    </div>
-  );
+  return <>{isLoading ? <MainLoader /> : "data"}</>;
 };
 
 export default Departments;
