@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userLoginRequest } from "@/appState/slices/authSlice";
 
 const formSchema = z.object({
@@ -33,6 +34,8 @@ const formSchema = z.object({
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
+
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -90,8 +93,19 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-            <Button className="hover:bg-blue-950" type="submit">
-              Submit
+            <Button
+              className="hover:bg-blue-950"
+              type="submit"
+              disabled={["pending"].includes(loading)}
+            >
+              {["pending"].includes(loading) ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "Submit"
+              )}
             </Button>
           </form>
         </Form>
