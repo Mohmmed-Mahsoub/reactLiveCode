@@ -1,4 +1,5 @@
 import { ENDPOINTS } from "@/api/endPoints";
+import DepartmentsContainer from "@/components/departments/departments.container";
 import MainLoader from "@/components/general/mainLoader.component";
 import ServerError from "@/components/general/serverError.component";
 import { dynamicAxiosRequest } from "@/helpers/utilities/dynamicAxiosRequest";
@@ -17,6 +18,9 @@ const Departments = () => {
     error,
   } = useSWR(`${ENDPOINTS.departments.getAllDepartments}`, fetcher);
   console.log("departments", departments);
+  const activeDepartmentsData = departments?.results?.filter(
+    (obj) => obj.is_active
+  );
   return (
     <>
       {isLoading ? (
@@ -24,7 +28,7 @@ const Departments = () => {
       ) : !isLoading && error ? (
         <ServerError />
       ) : (
-        "data"
+        <DepartmentsContainer activeDepartmentsData={activeDepartmentsData} />
       )}
     </>
   );
