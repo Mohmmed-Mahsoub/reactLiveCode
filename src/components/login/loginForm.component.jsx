@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLoginRequest } from "@/appState/slices/authSlice";
 import { showToast } from "@/helpers/utilities/showToast";
 import "react-toastify/dist/ReactToastify.css";
+import { ENDPOINTS } from "@/api/endPoints";
 
 const formSchema = z.object({
   email: z
@@ -54,8 +55,8 @@ const LoginForm = () => {
     console.log(values);
     dispatch(
       userLoginRequest({
-        baseUrl: "https://dev.minaini.com:2053/r",
-        endPoint: "/token",
+        baseUrl: import.meta.env.VITE_BASE_URLL,
+        endPoint: ENDPOINTS.auth.userLogin,
         body: {
           ...values,
           app_type: "patient",
