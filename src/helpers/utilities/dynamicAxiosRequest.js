@@ -11,13 +11,8 @@ export const dynamicAxiosRequest = async ({
       Accept: "application/json;odata=verbose",
     };
 
-    const ProxyURL =
-      localStorage.getItem("ProxyURL") != undefined
-        ? localStorage.getItem("ProxyURL")
-        : "";
-
     const response = await axios({
-      url: `${ProxyURL}${baseUrl}${endPoint}`,
+      url: `${baseUrl}${endPoint}`,
       method: method,
       data: body,
       headers: requestHeaders,
