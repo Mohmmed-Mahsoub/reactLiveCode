@@ -13,6 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useDispatch } from "react-redux";
+import { userLoginRequest } from "@/appState/slices/authSlice";
 
 const formSchema = z.object({
   email: z
@@ -30,6 +32,7 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -44,6 +47,16 @@ const LoginForm = () => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    dispatch(
+      userLoginRequest({
+        baseUrl: "https://dev.minaini.com:2053/r",
+        endPoint: "/token",
+        body: {
+          ...values,
+          app_type: "patient",
+        },
+      })
+    );
   }
   return (
     <div className="h-screen flex justify-center items-center">
