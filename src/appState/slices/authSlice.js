@@ -1,3 +1,4 @@
+import { dateToTimestamp } from "@/helpers/utilities/dateToTimestamp";
 import { dynamicAxiosRequest } from "@/helpers/utilities/dynamicAxiosRequest";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -6,6 +7,7 @@ const initialState = {
   loading: "idle", // 'idle' | 'pending' | 'succeeded' | 'failed' | 'end',,
   refreshToken: null,
   accessToken: null,
+  timestamp: null,
 };
 
 export const userLoginRequest = createAsyncThunk(
@@ -30,6 +32,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    //userLoginRequest
     builder.addCase(userLoginRequest.pending, (state) => {
       state.loading = "pending";
     });
@@ -39,12 +42,14 @@ const authSlice = createSlice({
       state.accessToken = action.payload?.accessToken;
       state.refreshToken = action.payload?.refreshToken;
       state.isUserLogenedIn = true;
+      state.timestamp = dateToTimestamp(Date.now());
     });
     builder.addCase(userLoginRequest.rejected, (state, action) => {
       state.loading = "failed";
       state.isUserLogenedIn = false;
       state.refreshToken = null;
       state.accessToken = null;
+      state.timestamp = null;
     });
   },
 });
