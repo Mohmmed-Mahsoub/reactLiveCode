@@ -4,5 +4,6 @@ export const ENDPOINTS = {
   },
   departments: {
     getAllDepartments: "/departments",
+    getDepartmentDoctors: "/doctors",
   },
 };
