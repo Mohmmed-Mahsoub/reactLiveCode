@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,10 +14,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useDispatch, useSelector } from "react-redux";
-import { userLoginRequest } from "@/appState/slices/authSlice";
+import {
+  refreshAccsessToken,
+  userLoginRequest,
+} from "@/appState/slices/authSlice";
 import { showToast } from "@/helpers/utilities/showToast";
 import "react-toastify/dist/ReactToastify.css";
 import { ENDPOINTS } from "@/api/endPoints";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z
@@ -38,6 +41,7 @@ const formSchema = z.object({
 const LoginForm = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.auth);
+  const [timeoutId, setTimeoutId] = useState(null);
 
   // 1. Define your form.
   const form = useForm({
@@ -52,7 +56,6 @@ const LoginForm = () => {
   function onSubmit(values) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
     dispatch(
       userLoginRequest({
         baseUrl: import.meta.env.VITE_BASE_URLL,
@@ -63,7 +66,29 @@ const LoginForm = () => {
         },
       })
     ).then((res) => {
-      if (!res.payload || !res.payload?.accessToken) {
+      if (res.payload?.refreshToken) {
+        // Clear previous timeout if exists
+        if (timeoutId) {
+          clearInterval(timeoutId);
+        }
+
+        // Set new timeout
+        /*schedule the refresh token request 
+        so if the app ones more than 24 hours the refresh token request will triggered
+        and continue do that after every 24 hours*/
+        const newTimeoutId = setInterval(() => {
+          dispatch(
+            refreshAccsessToken({
+              baseUrl: import.meta.env.VITE_BASE_URLL,
+              endPoint: ENDPOINTS.auth.refreshUserToken,
+              body: {
+                refresh: res.payload.refreshToken,
+              },
+            })
+          );
+        }, 24 * 60 * 60 * 1000); // 24 hours
+        setTimeoutId(newTimeoutId);
+      } else if (!res.payload || !res.payload?.accessToken) {
         showToast("error", "failed request");
       }
     });
