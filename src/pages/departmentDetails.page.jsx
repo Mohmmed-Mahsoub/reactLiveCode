@@ -1,4 +1,8 @@
 import { ENDPOINTS } from "@/api/endPoints";
+import DepartmentDetailsContainer from "@/components/departmentDeatails/departmentDeatails.container";
+import MainLoader from "@/components/general/mainLoader.component";
+import NoData from "@/components/general/noData.component";
+import ServerError from "@/components/general/serverError.component";
 import { dynamicAxiosRequest } from "@/helpers/utilities/dynamicAxiosRequest";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -20,7 +24,7 @@ const DepartmentDetails = () => {
       },
     }).then((res) => res);
   const {
-    data: doctors,
+    data: departmentDetailsData,
     isLoading,
     error,
   } = useSWR(
@@ -28,12 +32,20 @@ const DepartmentDetails = () => {
     fetcher
   );
 
-  console.log("doctors", doctors);
-
   return (
-    <div className="h-screen flex justify-center items-center">
-      DepartmentDetails page
-    </div>
+    <>
+      {isLoading ? (
+        <MainLoader />
+      ) : !isLoading && error ? (
+        <ServerError />
+      ) : departmentDetailsData?.results?.length === 0 ? (
+        <NoData text="no Doctors" />
+      ) : (
+        <DepartmentDetailsContainer
+          departmentDetailsData={departmentDetailsData?.results}
+        />
+      )}
+    </>
   );
 };
 
