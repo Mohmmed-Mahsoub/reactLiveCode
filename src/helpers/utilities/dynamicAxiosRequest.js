@@ -5,6 +5,7 @@ export const dynamicAxiosRequest = async ({
   endPoint,
   method = "GET",
   body = null,
+  cusomHeaders = {},
 }) => {
   try {
     const requestHeaders = {
@@ -15,7 +16,7 @@ export const dynamicAxiosRequest = async ({
       url: `${baseUrl}${endPoint}`,
       method: method,
       data: body,
-      headers: requestHeaders,
+      headers: { ...requestHeaders, ...cusomHeaders },
     });
     return response.data;
   } catch (error) {
